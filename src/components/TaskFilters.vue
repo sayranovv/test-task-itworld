@@ -42,12 +42,12 @@ const updateStatusFilter = (status: TaskStatus): void => {}
     </div>
     <div class="flex gap-3 py-3">
       <Select multiple v-model="tasksStore.selectedStatus">
-        <SelectTrigger>
+        <SelectTrigger class="w-40">
           <SelectValue placeholder="Select a status" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem v-for="item in ['todo', 'in progress', 'done']" :value="item.toLowerCase()">
+            <SelectItem v-for="item in ['todo', 'in-progress', 'done']" :value="item.toLowerCase()">
               {{ item }}
             </SelectItem>
           </SelectGroup>
