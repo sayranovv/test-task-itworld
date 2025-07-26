@@ -13,3 +13,5 @@ export interface Task {
   createdAt: Date
   updatedAt: Date
 }
+
+export type TaskStatus = 'todo' | 'in progress' | 'done'
