@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import type { Task } from '@/types/models.ts'
+import { ref, computed } from 'vue'
+import type { Task, TaskStatus } from '@/types/models.ts'
 
 export const useTasksStore = defineStore('tasksStore', () => {
   const tasks = ref<Task[]>([
@@ -63,7 +63,30 @@ export const useTasksStore = defineStore('tasksStore', () => {
     },
   ])
 
+  const searchQuery = ref('')
+  const selectedTags = ref<string[]>([])
+  const selectedStatus = ref<TaskStatus[]>([])
+
+  const filteredTasks = computed(() => {
+    return tasks.value.filter((task: Task) => {
+      const matchesSearch = task.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+
+      const matchesTags =
+        selectedTags.value.length === 0 || selectedTags.value.some((tag) => task.tags.includes(tag))
+
+      const matchesStatus =
+        selectedStatus.value.length === 0 ||
+        selectedStatus.value.some((status) => task.status.includes(status))
+
+      return matchesSearch && matchesTags && matchesStatus
+    })
+  })
+
   return {
     tasks,
+    searchQuery,
+    selectedTags,
+    selectedStatus,
+    filteredTasks,
   }
 })
