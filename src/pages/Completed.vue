@@ -15,7 +15,8 @@ const filtered = computed(() => tasksStore.filterTasksByStatus('done', true))
       <p class="text-sm opacity-50">Выполненные задачи</p>
     </header>
     <main>
-      <TasksList :tasks="filtered" />
+      <TasksList v-if="filtered.length > 0" :tasks="filtered" />
+      <p v-else class="opacity-50 text-center">Нет задач со статусом "Завершено"</p>
     </main>
   </div>
 </template>
