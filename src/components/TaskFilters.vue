@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-vue-next'
-import TaskFilterMultipleSelect from './TaskFilterMultipleSelect.vue'
-import type { TaskStatus } from '@/types/models.ts'
 import {
   TagsInput,
   TagsInputInput,
@@ -16,15 +12,12 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
 import { useTasksStore } from '@/stores/tasksStore.ts'
 
 const tasksStore = useTasksStore()
-
-const updateStatusFilter = (status: TaskStatus): void => {}
 </script>
 
 <template>
