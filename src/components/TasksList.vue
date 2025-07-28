@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import TaskItem from '@/components/TaskItem.vue'
-import { useTasksStore } from '@/stores/tasksStore'
+import type { Task } from '@/types/models.ts'
 
-const tasksStore = useTasksStore()
+defineProps<{ tasks: Task[] }>()
 </script>
 
 <template>
-  <h2 class="pt-5 pb-3 text-2xl font-bold">Tasks</h2>
-  <TaskItem v-for="task in tasksStore.filteredTasks" :key="task.id" :task />
+  <h2 class="pt-5 pb-3 text-2xl font-bold">Задачи</h2>
+  <TaskItem v-for="task in tasks" :key="task.id" :task />
 </template>
