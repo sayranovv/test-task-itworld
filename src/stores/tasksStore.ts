@@ -148,6 +148,45 @@ export const useTasksStore = defineStore('tasksStore', () => {
     tasks.value.push(task)
   }
 
+  const updateTask = (updatedTask: Task) => {
+    const findAndUpdate = (taskList: Task[]) => {
+      for (let i = 0; i < taskList.length; i++) {
+        if (taskList[i].id === updatedTask.id) {
+          taskList[i] = { ...updatedTask }
+          return true
+        }
+        if (taskList[i].subtasks?.length) {
+          const found = findAndUpdate(taskList[i].subtasks)
+          if (found) return true
+        }
+      }
+      return false
+    }
+
+    findAndUpdate(tasks.value)
+  }
+
+  function deleteTask(taskId: string) {
+    const findAndDelete = (taskList: Task[]): boolean => {
+      const index = taskList.findIndex((task) => task.id === taskId)
+      if (index !== -1) {
+        taskList.splice(index, 1)
+        return true
+      }
+
+      for (const task of taskList) {
+        if (task.subtasks?.length) {
+          const deleted = findAndDelete(task.subtasks)
+          if (deleted) return true
+        }
+      }
+
+      return false
+    }
+
+    findAndDelete(tasks.value)
+  }
+
   return {
     tasks,
     searchQuery,
@@ -156,5 +195,7 @@ export const useTasksStore = defineStore('tasksStore', () => {
     filteredTasks,
     filterTasksByStatus,
     addTask,
+    updateTask,
+    deleteTask,
   }
 })

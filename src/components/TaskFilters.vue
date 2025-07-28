@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useTasksStore } from '@/stores/tasksStore.ts'
+import { Input } from '@/components/ui/input'
 
 const tasksStore = useTasksStore()
 </script>

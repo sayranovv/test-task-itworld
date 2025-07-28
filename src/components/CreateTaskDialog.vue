@@ -36,6 +36,7 @@ import { useTasksStore } from '@/stores/tasksStore.ts'
 
 defineProps<{
   buttonTitle?: string
+  buttonSize?: 'default' | 'sm' | 'lg' | 'icon'
 }>()
 
 const tasksStore = useTasksStore()
@@ -80,7 +81,7 @@ function onSubmit(values: any) {
   <Form v-slot="{ handleSubmit }" as="" :validation-schema="formSchema">
     <Dialog v-model:open="isDialogOpen">
       <DialogTrigger as-child>
-        <Button>{{ buttonTitle || 'Новая задача' }}</Button>
+        <Button :size="buttonSize || 'default'">{{ buttonTitle || 'Новая задача' }}</Button>
       </DialogTrigger>
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
