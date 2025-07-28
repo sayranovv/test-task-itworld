@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Calendar1, CalendarDays, Inbox, CircleCheck, Settings, Trash } from 'lucide-vue-next'
+import { Clock, Circle, Inbox, CircleCheck, Settings, Trash } from 'lucide-vue-next'
 import {
   Sidebar,
   SidebarContent,
@@ -12,31 +12,31 @@ import {
   SidebarHeader,
   SidebarFooter,
 } from '@/components/ui/sidebar'
-import { Button } from '@/components/ui/button'
+import CreateTaskDialog from './CreateTaskDialog.vue'
 
 const items = [
   {
-    title: 'Inbox',
+    title: 'Все задачи',
     url: '/',
     icon: Inbox,
   },
   {
-    title: 'Today',
-    url: '/today',
-    icon: Calendar1,
+    title: 'К выполнению',
+    url: '/todo',
+    icon: Circle,
   },
   {
-    title: 'Upcoming',
-    url: '/upcoming',
-    icon: CalendarDays,
+    title: 'В процессе',
+    url: '/inprogress',
+    icon: Clock,
   },
   {
-    title: 'Completed',
+    title: 'Завершено',
     url: '/completed',
     icon: CircleCheck,
   },
   {
-    title: 'Trash',
+    title: 'Корзина',
     url: '/trash',
     icon: Trash,
   },
@@ -48,7 +48,7 @@ const items = [
     <SidebarHeader />
     <SidebarContent>
       <SidebarGroup>
-        <SidebarGroupLabel>Projects</SidebarGroupLabel>
+        <SidebarGroupLabel>Задачи</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
             <SidebarMenuItem v-for="item in items" :key="item.title">
@@ -67,12 +67,13 @@ const items = [
       <SidebarGroup>
         <SidebarGroupContent>
           <SidebarMenu class="space-y-2">
-            <Button>New project</Button>
+            <CreateTaskDialog />
+
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <RouterLink to="/settings">
                   <component :is="Settings" />
-                  <span>Settings</span>
+                  <span>Настройки</span>
                 </RouterLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
