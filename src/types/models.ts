@@ -15,3 +15,12 @@ export interface Task {
 }
 
 export type TaskStatus = 'todo' | 'in-progress' | 'done'
+
+export interface ExportedData {
+  projects: Task[]
+  filters: {
+    statuses: TaskStatus[]
+    tags: string[]
+    search: string
+  }
+}
