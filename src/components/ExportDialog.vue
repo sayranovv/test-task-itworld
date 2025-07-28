@@ -26,6 +26,7 @@ import { toast } from 'vue-sonner'
 import { useTasksStore } from '@/stores/tasksStore.ts'
 import { exportToFile, importFromFile } from '@/utils/exportImport'
 import { Label } from '@/components/ui/label'
+import type { Task, TaskStatus } from '@/types/models.ts'
 
 const props = defineProps<{
   type: 'export' | 'import'
@@ -64,14 +65,23 @@ const onSubmit = async (values: any) => {
     }
 
     try {
-      const data = await importFromFile(file, values.password)
+      const data = (await importFromFile(file, values.password)) as {
+        projects: Task[]
+        filters: {
+          statuses: string[]
+          tags: string[]
+          search: string
+        }
+      }
 
       if (data && typeof data === 'object') {
         const { projects, filters } = data
         tasksStore.tasks = projects
-        tasksStore.selectedStatus = filters.statuses
+        tasksStore.selectedStatus = filters.statuses.filter((status): status is TaskStatus =>
+          ['todo', 'in-progress', 'done'].includes(status),
+        )
         tasksStore.selectedTags = filters.tags
-        tasksStore.searchQuery = filters.search
+        tasksStore.searchQuery.value = filters.search
         toast('Импорт выполнен!')
       } else {
         toast('Не удалось расшифровать данные, возможно, неверный пароль')
