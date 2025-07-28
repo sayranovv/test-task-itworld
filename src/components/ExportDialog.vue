@@ -45,7 +45,7 @@ const formSchema = toTypedSchema(
 
 const onSubmit = async (values: any) => {
   if (props.type === 'export') {
-    const exportData = {
+    const exportData: ExportedData = {
       projects: tasksStore.tasks,
       filters: {
         statuses: tasksStore.selectedStatus,
