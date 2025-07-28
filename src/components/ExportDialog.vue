@@ -81,7 +81,7 @@ const onSubmit = async (values: any) => {
           ['todo', 'in-progress', 'done'].includes(status),
         )
         tasksStore.selectedTags = filters.tags
-        tasksStore.searchQuery.value = filters.search
+        tasksStore.searchQuery = filters.search
         toast('Импорт выполнен!')
       } else {
         toast('Не удалось расшифровать данные, возможно, неверный пароль')
