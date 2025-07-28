@@ -52,7 +52,7 @@ const formSchema = toTypedSchema(
   }),
 )
 
-function onSubmit(values: any) {
+const onSubmit = (values: any) => {
   const newTask = {
     id: uuidv4(),
     title: values.taskTitle,

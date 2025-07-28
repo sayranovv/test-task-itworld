@@ -166,7 +166,7 @@ export const useTasksStore = defineStore('tasksStore', () => {
     findAndUpdate(tasks.value)
   }
 
-  function deleteTask(taskId: string) {
+  const deleteTask = (taskId: string) => {
     const findAndDelete = (taskList: Task[]): boolean => {
       const index = taskList.findIndex((task) => task.id === taskId)
       if (index !== -1) {

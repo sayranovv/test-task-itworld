@@ -26,7 +26,7 @@ const tasksStore = useTasksStore()
     <div class="relative w-full items-center py-3">
       <Input
         type="text"
-        placeholder="Search tasks"
+        placeholder="Поиск по названию"
         class="pl-12 h-12 !text-lg"
         v-model="tasksStore.searchQuery"
       />
@@ -36,14 +36,14 @@ const tasksStore = useTasksStore()
     </div>
     <div class="flex gap-3 py-3">
       <Select multiple v-model="tasksStore.selectedStatus">
-        <SelectTrigger class="w-40">
-          <SelectValue placeholder="Select a status" />
+        <SelectTrigger class="w-44">
+          <SelectValue placeholder="Выберите статус" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem v-for="item in ['todo', 'in-progress', 'done']" :value="item.toLowerCase()">
-              {{ item }}
-            </SelectItem>
+            <SelectItem value="todo"> К выполнению </SelectItem>
+            <SelectItem value="in-progress"> В процессе </SelectItem>
+            <SelectItem value="done"> Завершено </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
@@ -54,7 +54,7 @@ const tasksStore = useTasksStore()
           <TagsInputItemDelete />
         </TagsInputItem>
 
-        <TagsInputInput placeholder="Tags" />
+        <TagsInputInput placeholder="Теги" />
       </TagsInput>
     </div>
   </div>
