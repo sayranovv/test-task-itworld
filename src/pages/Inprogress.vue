@@ -15,7 +15,8 @@ const filtered = computed(() => tasksStore.filterTasksByStatus('in-progress', tr
       <p class="text-sm opacity-50">Задачи, находящиеся в процессе выполнения</p>
     </header>
     <main>
-      <TasksList :tasks="filtered" />
+      <TasksList v-if="filtered.length > 0" :tasks="filtered" />
+      <p v-else class="opacity-50 text-center">Нет задач со статусом "В процессе"</p>
     </main>
   </div>
 </template>
