@@ -162,5 +162,3 @@ const onSubmit = (values: any) => {
     </Dialog>
   </Form>
 </template>
-
-<style scoped></style>
