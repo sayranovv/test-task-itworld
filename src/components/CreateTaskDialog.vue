@@ -34,9 +34,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { toast } from 'vue-sonner'
 import { useTasksStore } from '@/stores/tasksStore.ts'
 
-defineProps<{
+const props = defineProps<{
   buttonTitle?: string
   buttonSize?: 'default' | 'sm' | 'lg' | 'icon'
+  parentId?: string
 }>()
 
 const tasksStore = useTasksStore()
@@ -57,19 +58,21 @@ const onSubmit = (values: any) => {
     id: uuidv4(),
     title: values.taskTitle,
     status: values.taskStatus,
-    tags: values.taskTags,
+    tags: values.taskTags || [],
     subtasks: [],
     createdAt: new Date(),
     updatedAt: new Date(),
   }
 
-  tasksStore.addTask(newTask)
+  if (props.parentId) {
+    tasksStore.addSubtask(props.parentId, newTask)
+  } else {
+    tasksStore.addTask(newTask)
+  }
 
   toast('Задача создана', {
     description: 'Новая задача успешно добавлена!',
   })
-
-  console.log(newTask)
 
   isDialogOpen.value = false
 

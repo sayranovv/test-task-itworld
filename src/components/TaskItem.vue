@@ -118,7 +118,7 @@ const deleteTask = () => {
       </div>
 
       <div v-else class="flex gap-4 items-center">
-        <CreateTaskDialog button-title="Добавить подзадачу" button-size="sm" />
+        <CreateTaskDialog button-title="Добавить подзадачу" button-size="sm" :parent-id="task.id" />
 
         <Edit @click="toggleEdit" class="size-5 shrink-0 cursor-pointer" />
 
