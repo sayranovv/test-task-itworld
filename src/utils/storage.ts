@@ -2,6 +2,7 @@ const STORAGE_KEY = 'todo_app_data'
 import type { Task } from '@/types/models.ts'
 import type { TaskStatus } from '@/types/models.ts'
 
+// функция для подтягивания данных из localStorage (парсинг)
 export const loadFromLocalStorage = () => {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
@@ -29,6 +30,7 @@ export const loadFromLocalStorage = () => {
   }
 }
 
+// функция сохранения данных
 export const saveToLocalStorage = (
   tasks: Task[],
   statuses: TaskStatus[],

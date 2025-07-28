@@ -83,11 +83,14 @@ const onSubmit = (values: any) => {
 <template>
   <Form v-slot="{ handleSubmit }" as="" :validation-schema="formSchema">
     <Dialog v-model:open="isDialogOpen">
+      <!--кнопка-триггер-->
       <DialogTrigger as-child>
         <Button :size="buttonSize || 'default'">{{ buttonTitle || 'Новая задача' }}</Button>
       </DialogTrigger>
+
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
+          <!--заголовок окна-->
           <DialogTitle>
             <span v-if="parentId">Добавить подзадачу</span>
             <span v-else>Создать новую задачу</span>
@@ -96,6 +99,7 @@ const onSubmit = (values: any) => {
         </DialogHeader>
 
         <form id="dialogForm" @submit="handleSubmit($event, onSubmit)" class="grid gap-4 py-4">
+          <!--поле для названия задачи-->
           <FormField v-slot="{ componentField }" name="taskTitle">
             <FormItem class="grid grid-cols-4 items-center gap-4">
               <FormLabel class="text-right">Название</FormLabel>
@@ -109,6 +113,7 @@ const onSubmit = (values: any) => {
             </FormItem>
           </FormField>
 
+          <!--поле для статуса задачи-->
           <FormField v-slot="{ componentField }" name="taskStatus">
             <FormItem class="grid grid-cols-4 items-center gap-4">
               <FormLabel class="text-right">Статус</FormLabel>
@@ -133,6 +138,7 @@ const onSubmit = (values: any) => {
             </FormItem>
           </FormField>
 
+          <!--поле для тегов задачи-->
           <FormField v-slot="{ componentField }" name="taskTags">
             <FormItem class="grid grid-cols-4 items-center gap-4">
               <FormLabel class="text-right">Теги</FormLabel>
@@ -157,6 +163,7 @@ const onSubmit = (values: any) => {
           </FormField>
         </form>
 
+        <!--кнопки-->
         <DialogFooter>
           <DialogClose as-child>
             <Button type="button" variant="secondary"> Отмена </Button>

@@ -12,6 +12,7 @@ import CreateTaskDialog from './components/CreateTaskDialog.vue'
     <SidebarProvider>
       <AppSidebar />
       <div class="flex-1 overflow-hidden pr-2">
+        <!--панель с триггером сайдбара и кнопками -->
         <div class="mx-4 mt-4 flex justify-between">
           <SidebarTrigger />
           <div class="flex items-center gap-2">
@@ -23,6 +24,7 @@ import CreateTaskDialog from './components/CreateTaskDialog.vue'
           </div>
         </div>
         <RouterView />
+        <!-- тостер-соннер для уведомленийи -->
         <Toaster />
       </div>
     </SidebarProvider>

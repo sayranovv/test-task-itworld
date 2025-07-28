@@ -28,7 +28,7 @@ const props = defineProps<{ task: Task }>()
 
 const tasksStore = useTasksStore()
 
-const isEditing = ref(false)
+const isEditing = ref(false) // реализация inline редактирования
 const editedTitle = ref(props.task.title)
 const editedStatus = ref(props.task.status)
 const editedTags = ref([...props.task.tags])
@@ -63,6 +63,7 @@ const deleteTask = () => {
   <div class="py-3">
     <div class="flex justify-between items-center gap-4">
       <div class="flex gap-4 flex-1 flex-wrap sm:flex-nowrap overflow-hidden items-center">
+        <!--        иконка-->
         <div
           class="size-12 shrink-0 bg-primary/5 rounded-lg justify-center items-center hidden sm:flex"
         >
@@ -70,6 +71,8 @@ const deleteTask = () => {
           <Circle v-else-if="task.status === 'todo'" />
           <Clock v-else />
         </div>
+
+        <!--название задачи-->
         <div class="flex flex-col justify-center overflow-hidden">
           <div v-if="isEditing">
             <Input v-model="editedTitle" />
@@ -77,6 +80,7 @@ const deleteTask = () => {
           <p v-else class="font-medium leading-4 truncate">{{ task.title }}</p>
         </div>
 
+        <!--статус селект-->
         <div v-if="isEditing">
           <Select v-model="editedStatus">
             <SelectTrigger class="w-40">
@@ -99,13 +103,13 @@ const deleteTask = () => {
               : 'Завершено'
         }}</Badge>
 
+        <!--теги-->
         <div v-if="isEditing" class="flex gap-1 flex-wrap">
           <TagsInput v-model="editedTags">
             <TagsInputItem v-for="item in editedTags" :key="item" :value="item">
               <TagsInputItemText />
               <TagsInputItemDelete />
             </TagsInputItem>
-
             <TagsInputInput placeholder="Теги" />
           </TagsInput>
         </div>
@@ -114,6 +118,7 @@ const deleteTask = () => {
         </div>
       </div>
 
+      <!--кнопки в режиме редактирования-->
       <div v-if="isEditing" class="flex gap-2 items-center flex-col sm:flex-row">
         <Button size="sm" variant="secondary" @click="isEditing = false" class="w-full sm:w-fit"
           >Отмена</Button
@@ -121,6 +126,7 @@ const deleteTask = () => {
         <Button size="sm" @click="saveChanges">Сохранить</Button>
       </div>
 
+      <!--кнопки в обычном режиме-->
       <div v-else class="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center">
         <div class="hidden sm:block">
           <CreateTaskDialog
@@ -135,6 +141,8 @@ const deleteTask = () => {
         <X @click="deleteTask" class="size-7 shrink-0 cursor-pointer" />
       </div>
     </div>
+
+    <!--рекурсивное создание подзадач-->
     <div v-if="task.subtasks.length" class="ml-5 space-y-2">
       <TaskItem v-for="subtask in task.subtasks" :key="subtask.id" :task="subtask" />
     </div>

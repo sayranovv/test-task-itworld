@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Clock, Circle, Inbox, CircleCheck, Settings, Trash } from 'lucide-vue-next'
+import { Clock, Circle, Inbox, CircleCheck, Settings } from 'lucide-vue-next'
 import {
   Sidebar,
   SidebarContent,
@@ -63,7 +63,6 @@ const items = [
         <SidebarGroupContent>
           <SidebarMenu class="space-y-2">
             <CreateTaskDialog />
-
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <RouterLink to="#">
