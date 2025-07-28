@@ -106,11 +106,55 @@ export const useTasksStore = defineStore('tasksStore', () => {
     return tasks.value.map(filterRecursively).filter((task): task is Task => task !== null)
   })
 
+  const filterTasksByStatus = (status: TaskStatus, flatten = false): Task[] => {
+    const matchesStatus = (task: Task): boolean => task.status === status
+
+    const filterRecursively = (task: Task): Task[] => {
+      const matched: Task[] = []
+
+      if (matchesStatus(task)) {
+        matched.push({ ...task, subtasks: [] })
+      }
+
+      for (const subtask of task.subtasks) {
+        matched.push(...filterRecursively(subtask))
+      }
+
+      return matched
+    }
+
+    if (flatten) {
+      return tasks.value.flatMap(filterRecursively)
+    } else {
+      const filterTree = (task: Task): Task | null => {
+        const filteredSubtasks = task.subtasks
+          .map(filterTree)
+          .filter((sub): sub is Task => sub !== null)
+
+        if (matchesStatus(task) || filteredSubtasks.length > 0) {
+          return {
+            ...task,
+            subtasks: filteredSubtasks,
+          }
+        }
+        return null
+      }
+
+      return tasks.value.map(filterTree).filter((t): t is Task => t !== null)
+    }
+  }
+
+  const addTask = (task: Task): void => {
+    tasks.value.push(task)
+  }
+
   return {
     tasks,
     searchQuery,
     selectedTags,
     selectedStatus,
     filteredTasks,
+    filterTasksByStatus,
+    addTask,
   }
 })
