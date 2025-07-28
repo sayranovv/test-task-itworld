@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Task, TaskStatus } from '@/types/models.ts'
+import type { ExportedData, Task, TaskStatus } from '@/types/models.ts'
 import { loadFromLocalStorage, saveToLocalStorage } from '@/utils/storage.ts'
 import { watch } from 'vue'
 
@@ -12,6 +12,7 @@ export const useTasksStore = defineStore('tasksStore', () => {
   const selectedTags = ref<string[]>(localData?.filters.tags ?? [])
   const selectedStatus = ref<TaskStatus[]>(localData?.filters.statuses ?? [])
 
+  // функция для фильтрации задач по фильтрам на главной странице
   const filteredTasks = computed(() => {
     const matchesTask = (task: Task): boolean => {
       const matchesSearch = task.title.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -41,6 +42,7 @@ export const useTasksStore = defineStore('tasksStore', () => {
     return tasks.value.map(filterRecursively).filter((task): task is Task => task !== null)
   })
 
+  // функция для фильтрации задач только по статусу (для остальных страниц)
   const filterTasksByStatus = (status: TaskStatus, flatten = false): Task[] => {
     const matchesStatus = (task: Task): boolean => task.status === status
 
@@ -122,6 +124,7 @@ export const useTasksStore = defineStore('tasksStore', () => {
     findAndDelete(tasks.value)
   }
 
+  // функция добавления подзадачи
   const addSubtask = (parentId: string, subtask: Task) => {
     const findAndAdd = (taskList: Task[]): boolean => {
       for (const task of taskList) {
@@ -141,6 +144,14 @@ export const useTasksStore = defineStore('tasksStore', () => {
     findAndAdd(tasks.value)
   }
 
+  const importData = (data: ExportedData) => {
+    tasks.value = data.projects
+    selectedStatus.value = data.filters.statuses
+    selectedTags.value = data.filters.tags
+    searchQuery.value = data.filters.search
+  }
+
+  // отслеживание данных и мгновенное обновление localStorage
   watch(
     [tasks, selectedStatus, selectedTags, searchQuery],
     ([newTasks, newStatuses, newTags, newSearch]) => {
@@ -160,5 +171,6 @@ export const useTasksStore = defineStore('tasksStore', () => {
     updateTask,
     deleteTask,
     addSubtask,
+    importData,
   }
 })

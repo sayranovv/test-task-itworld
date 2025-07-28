@@ -23,6 +23,7 @@ const tasksStore = useTasksStore()
 
 <template>
   <div>
+    <!--строка поиска-->
     <div class="relative w-full items-center py-3">
       <Input
         type="text"
@@ -34,9 +35,11 @@ const tasksStore = useTasksStore()
         <Search class="size-6 text-muted-foreground" />
       </span>
     </div>
-    <div class="flex gap-3 py-3">
+
+    <!--статус селект-->
+    <div class="flex flex-col sm:flex-row gap-3 py-3">
       <Select multiple v-model="tasksStore.selectedStatus">
-        <SelectTrigger class="w-44">
+        <SelectTrigger class="w-full sm:w-44">
           <SelectValue placeholder="Выберите статус" />
         </SelectTrigger>
         <SelectContent>
@@ -48,12 +51,12 @@ const tasksStore = useTasksStore()
         </SelectContent>
       </Select>
 
-      <TagsInput v-model="tasksStore.selectedTags">
+      <!--теги-->
+      <TagsInput class="w-full sm:w-fit" v-model="tasksStore.selectedTags">
         <TagsInputItem v-for="item in tasksStore.selectedTags" :key="item" :value="item">
           <TagsInputItemText />
           <TagsInputItemDelete />
         </TagsInputItem>
-
         <TagsInputInput placeholder="Теги" />
       </TagsInput>
     </div>
