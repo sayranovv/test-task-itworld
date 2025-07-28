@@ -1,81 +1,16 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Task, TaskStatus } from '@/types/models.ts'
+import { loadFromLocalStorage, saveToLocalStorage } from '@/utils/storage.ts'
+import { watch } from 'vue'
 
 export const useTasksStore = defineStore('tasksStore', () => {
-  const tasks = ref<Task[]>([
-    {
-      id: '1',
-      title: 'Hardcode task 1',
-      status: 'todo',
-      tags: ['tag1', 'gat2'],
-      subtasks: [
-        {
-          id: '11',
-          title: 'Hardcode subtask 1.1',
-          status: 'in-progress',
-          tags: ['exmpl1', 'exmpl2'],
-          subtasks: [],
-          createdAt: new Date('2025-07-25T14:30:00Z'),
-          updatedAt: new Date('2025-07-25T14:30:00Z'),
-        },
-      ],
-      createdAt: new Date('2025-07-26T14:30:00Z'),
-      updatedAt: new Date('2025-07-26T14:30:00Z'),
-    },
-    {
-      id: '2',
-      title: 'Hardcode task 2',
-      status: 'done',
-      tags: ['tag1', 'gat2', 'hhh'],
-      subtasks: [
-        {
-          id: '21',
-          title: 'Hardcode subtask 2.1',
-          status: 'in-progress',
-          tags: ['exmpl1', 'exmpl2'],
-          subtasks: [],
-          createdAt: new Date('2025-07-25T14:30:00Z'),
-          updatedAt: new Date('2025-07-25T14:30:00Z'),
-        },
-      ],
-      createdAt: new Date('2025-07-26T14:30:00Z'),
-      updatedAt: new Date('2025-07-26T14:30:00Z'),
-    },
-    {
-      id: '3',
-      title: 'Hardcode task 3',
-      status: 'todo',
-      tags: [],
-      subtasks: [
-        {
-          id: '31',
-          title: 'Hardcode subtask 3.1',
-          status: 'done',
-          tags: ['exmpl1', 'exmpl2'],
-          subtasks: [
-            {
-              id: '311',
-              title: 'Hardcode subtask 3.1.1',
-              status: 'in-progress',
-              tags: ['exmpl1', 'exmpl2'],
-              subtasks: [],
-              createdAt: new Date('2025-07-25T14:30:00Z'),
-              updatedAt: new Date('2025-07-25T14:30:00Z'),
-            },
-          ],
-          createdAt: new Date('2025-07-25T14:30:00Z'),
-          updatedAt: new Date('2025-07-25T14:30:00Z'),
-        },
-      ],
-      createdAt: new Date('2025-07-26T14:30:00Z'),
-      updatedAt: new Date('2025-07-26T14:30:00Z'),
-    },
-  ])
+  const localData = loadFromLocalStorage()
 
-  const searchQuery = ref('')
-  const selectedTags = ref<string[]>([])
-  const selectedStatus = ref<TaskStatus[]>([])
+  const tasks = ref<Task[]>(localData?.projects ?? [])
+  const searchQuery = ref(localData?.filters.search ?? '')
+  const selectedTags = ref<string[]>(localData?.filters.tags ?? [])
+  const selectedStatus = ref<TaskStatus[]>(localData?.filters.statuses ?? [])
 
   const filteredTasks = computed(() => {
     const matchesTask = (task: Task): boolean => {
@@ -187,6 +122,33 @@ export const useTasksStore = defineStore('tasksStore', () => {
     findAndDelete(tasks.value)
   }
 
+  const addSubtask = (parentId: string, subtask: Task) => {
+    const findAndAdd = (taskList: Task[]): boolean => {
+      for (const task of taskList) {
+        if (task.id === parentId) {
+          if (!task.subtasks) task.subtasks = []
+          task.subtasks.push(subtask)
+          return true
+        }
+        if (task.subtasks?.length) {
+          const added = findAndAdd(task.subtasks)
+          if (added) return true
+        }
+      }
+      return false
+    }
+
+    findAndAdd(tasks.value)
+  }
+
+  watch(
+    [tasks, selectedStatus, selectedTags, searchQuery],
+    ([newTasks, newStatuses, newTags, newSearch]) => {
+      saveToLocalStorage(newTasks, newStatuses, newTags, newSearch)
+    },
+    { deep: true },
+  )
+
   return {
     tasks,
     searchQuery,
@@ -197,5 +159,6 @@ export const useTasksStore = defineStore('tasksStore', () => {
     addTask,
     updateTask,
     deleteTask,
+    addSubtask,
   }
 })
