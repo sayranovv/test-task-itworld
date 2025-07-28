@@ -27,6 +27,7 @@ import { useTasksStore } from '@/stores/tasksStore.ts'
 import { exportToFile, importFromFile } from '@/utils/exportImport'
 import { Label } from '@/components/ui/label'
 import type { Task, ExportedData } from '@/types/models.ts'
+import { Download, Upload } from 'lucide-vue-next'
 
 const props = defineProps<{
   type: 'export' | 'import'
@@ -93,8 +94,14 @@ const onSubmit = async (values: any) => {
   <Form v-slot="{ handleSubmit }" as="" :validation-schema="formSchema">
     <Dialog v-model:open="isDialogOpen">
       <DialogTrigger as-child>
-        <Button variant="secondary" v-if="type === 'export'">Экспорт</Button>
-        <Button v-if="type === 'import'">Импорт</Button>
+        <Button variant="secondary" v-if="type === 'export'">
+          <Download class="w-4 h-4 block sm:hidden" />
+          <span class="hidden sm:block">Экспорт</span>
+        </Button>
+        <Button v-if="type === 'import'">
+          <Upload class="w-4 h-4 block sm:hidden" />
+          <span class="hidden sm:block">Импорт</span>
+        </Button>
       </DialogTrigger>
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
@@ -113,7 +120,13 @@ const onSubmit = async (values: any) => {
         >
           <div class="grid grid-cols-4 items-center gap-4" v-if="type === 'import'">
             <Label for="file" class="text-right">Файл:</Label>
-            <input id="file" ref="fileInputRef" type="file" accept=".txt" class="col-span-3" />
+            <input
+              id="file"
+              ref="fileInputRef"
+              type="file"
+              accept=".txt"
+              class="col-span-3 text-sm py-2 px-3 border rounded-md shadow-xs"
+            />
           </div>
 
           <FormField v-slot="{ componentField }" name="password">
@@ -122,7 +135,9 @@ const onSubmit = async (values: any) => {
               <FormControl>
                 <Input
                   class="col-span-3"
-                  placeholder="Введите пароль для шифрования"
+                  :placeholder="
+                    type === 'export' ? 'Введите пароль для шифрования' : 'Введите пароль'
+                  "
                   v-bind="componentField"
                 />
               </FormControl>

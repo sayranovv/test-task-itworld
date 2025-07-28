@@ -62,8 +62,10 @@ const deleteTask = () => {
 <template>
   <div class="py-3">
     <div class="flex justify-between items-center gap-4">
-      <div class="flex gap-4 flex-1 overflow-hidden items-center">
-        <div class="size-12 shrink-0 bg-primary/5 rounded-lg flex justify-center items-center">
+      <div class="flex gap-4 flex-1 flex-wrap sm:flex-nowrap overflow-hidden items-center">
+        <div
+          class="size-12 shrink-0 bg-primary/5 rounded-lg justify-center items-center hidden sm:flex"
+        >
           <CircleCheck v-if="task.status === 'done'" />
           <Circle v-else-if="task.status === 'todo'" />
           <Clock v-else />
@@ -72,7 +74,7 @@ const deleteTask = () => {
           <div v-if="isEditing">
             <Input v-model="editedTitle" />
           </div>
-          <p v-else class="font-medium">{{ task.title }}</p>
+          <p v-else class="font-medium leading-4 truncate">{{ task.title }}</p>
         </div>
 
         <div v-if="isEditing">
@@ -112,13 +114,21 @@ const deleteTask = () => {
         </div>
       </div>
 
-      <div v-if="isEditing" class="flex gap-2 items-center">
-        <Button size="sm" variant="secondary" @click="isEditing = false">Отмена</Button>
+      <div v-if="isEditing" class="flex gap-2 items-center flex-col sm:flex-row">
+        <Button size="sm" variant="secondary" @click="isEditing = false" class="w-full sm:w-fit"
+          >Отмена</Button
+        >
         <Button size="sm" @click="saveChanges">Сохранить</Button>
       </div>
 
-      <div v-else class="flex gap-4 items-center">
-        <CreateTaskDialog button-title="Добавить подзадачу" button-size="sm" :parent-id="task.id" />
+      <div v-else class="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center">
+        <div class="hidden sm:block">
+          <CreateTaskDialog
+            button-title="Добавить подзадачу"
+            button-size="sm"
+            :parent-id="task.id"
+          />
+        </div>
 
         <Edit @click="toggleEdit" class="size-5 shrink-0 cursor-pointer" />
 

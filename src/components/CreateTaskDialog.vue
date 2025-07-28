@@ -88,7 +88,10 @@ const onSubmit = (values: any) => {
       </DialogTrigger>
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Создать новую задачу</DialogTitle>
+          <DialogTitle>
+            <span v-if="parentId">Добавить подзадачу</span>
+            <span v-else>Создать новую задачу</span>
+          </DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
 
@@ -99,7 +102,7 @@ const onSubmit = (values: any) => {
               <FormControl>
                 <Input
                   class="col-span-3"
-                  placeholder="Введите название задачи"
+                  :placeholder="'Введите название ' + (parentId ? 'подзадачи' : 'задачи')"
                   v-bind="componentField"
                 />
               </FormControl>
@@ -113,7 +116,9 @@ const onSubmit = (values: any) => {
               <Select v-bind="componentField">
                 <FormControl>
                   <SelectTrigger class="col-span-3 w-full">
-                    <SelectValue placeholder="Выберите статус задачи" />
+                    <SelectValue
+                      :placeholder="'Выберите статус ' + (parentId ? 'подзадачи' : 'задачи')"
+                    />
                   </SelectTrigger>
                 </FormControl>
 

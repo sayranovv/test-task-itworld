@@ -4,6 +4,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { Toaster } from '@/components/ui/sonner'
 import 'vue-sonner/style.css'
 import ExportDialog from './components/ExportDialog.vue'
+import CreateTaskDialog from './components/CreateTaskDialog.vue'
 </script>
 
 <template>
@@ -12,8 +13,11 @@ import ExportDialog from './components/ExportDialog.vue'
       <AppSidebar />
       <div class="flex-1 overflow-hidden pr-2">
         <div class="mx-4 mt-4 flex justify-between">
-          <SidebarTrigger class="" />
-          <div class="space-x-2">
+          <SidebarTrigger />
+          <div class="flex items-center gap-2">
+            <div class="block sm:hidden">
+              <CreateTaskDialog button-title="+" />
+            </div>
             <ExportDialog type="export" />
             <ExportDialog type="import" />
           </div>
