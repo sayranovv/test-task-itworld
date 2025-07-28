@@ -9,16 +9,6 @@ const router = createRouter({
       component: () => import('../pages/Inbox.vue'),
     },
     {
-      path: '/today',
-      name: 'today',
-      component: () => import('../pages/Today.vue'),
-    },
-    {
-      path: '/upcoming',
-      name: 'upcoming',
-      component: () => import('../pages/Upcoming.vue'),
-    },
-    {
       path: '/completed',
       name: 'completed',
       component: () => import('../pages/Completed.vue'),
@@ -32,6 +22,16 @@ const router = createRouter({
       path: '/settings',
       name: 'settings',
       component: () => import('../pages/Settings.vue'),
+    },
+    {
+      path: '/inprogress',
+      name: 'in progress',
+      component: () => import('../pages/Inprogress.vue'),
+    },
+    {
+      path: '/todo',
+      name: 'todo',
+      component: () => import('../pages/Todo.vue'),
     },
   ],
 })
