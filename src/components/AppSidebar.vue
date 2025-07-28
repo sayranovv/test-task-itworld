@@ -35,11 +35,6 @@ const items = [
     url: '/completed',
     icon: CircleCheck,
   },
-  {
-    title: 'Корзина',
-    url: '/trash',
-    icon: Trash,
-  },
 ]
 </script>
 
@@ -71,7 +66,7 @@ const items = [
 
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <RouterLink to="/settings">
+                <RouterLink to="#">
                   <component :is="Settings" />
                   <span>Настройки</span>
                 </RouterLink>

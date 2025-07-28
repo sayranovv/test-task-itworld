@@ -34,8 +34,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { toast } from 'vue-sonner'
 import { useTasksStore } from '@/stores/tasksStore.ts'
 
-defineProps<{
+const props = defineProps<{
   buttonTitle?: string
+  buttonSize?: 'default' | 'sm' | 'lg' | 'icon'
+  parentId?: string
 }>()
 
 const tasksStore = useTasksStore()
@@ -51,24 +53,26 @@ const formSchema = toTypedSchema(
   }),
 )
 
-function onSubmit(values: any) {
+const onSubmit = (values: any) => {
   const newTask = {
     id: uuidv4(),
     title: values.taskTitle,
     status: values.taskStatus,
-    tags: values.taskTags,
+    tags: values.taskTags || [],
     subtasks: [],
     createdAt: new Date(),
     updatedAt: new Date(),
   }
 
-  tasksStore.addTask(newTask)
+  if (props.parentId) {
+    tasksStore.addSubtask(props.parentId, newTask)
+  } else {
+    tasksStore.addTask(newTask)
+  }
 
   toast('Задача создана', {
     description: 'Новая задача успешно добавлена!',
   })
-
-  console.log(newTask)
 
   isDialogOpen.value = false
 
@@ -80,7 +84,7 @@ function onSubmit(values: any) {
   <Form v-slot="{ handleSubmit }" as="" :validation-schema="formSchema">
     <Dialog v-model:open="isDialogOpen">
       <DialogTrigger as-child>
-        <Button>{{ buttonTitle || 'Новая задача' }}</Button>
+        <Button :size="buttonSize || 'default'">{{ buttonTitle || 'Новая задача' }}</Button>
       </DialogTrigger>
       <DialogContent class="sm:max-w-[425px]">
         <DialogHeader>
@@ -158,5 +162,3 @@ function onSubmit(values: any) {
     </Dialog>
   </Form>
 </template>
-
-<style scoped></style>

@@ -14,16 +14,6 @@ const router = createRouter({
       component: () => import('../pages/Completed.vue'),
     },
     {
-      path: '/trash',
-      name: 'trash',
-      component: () => import('../pages/Trash.vue'),
-    },
-    {
-      path: '/settings',
-      name: 'settings',
-      component: () => import('../pages/Settings.vue'),
-    },
-    {
       path: '/inprogress',
       name: 'in progress',
       component: () => import('../pages/Inprogress.vue'),
