@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { Input } from '@/components/ui/input'
 import { Search } from 'lucide-vue-next'
-import TaskFilterMultipleSelect from './TaskFilterMultipleSelect.vue'
-import type { TaskStatus } from '@/types/models.ts'
 import {
   TagsInput,
   TagsInputInput,
@@ -16,15 +12,12 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
 import { useTasksStore } from '@/stores/tasksStore.ts'
 
 const tasksStore = useTasksStore()
-
-const updateStatusFilter = (status: TaskStatus): void => {}
 </script>
 
 <template>
@@ -42,12 +35,12 @@ const updateStatusFilter = (status: TaskStatus): void => {}
     </div>
     <div class="flex gap-3 py-3">
       <Select multiple v-model="tasksStore.selectedStatus">
-        <SelectTrigger>
+        <SelectTrigger class="w-40">
           <SelectValue placeholder="Select a status" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectItem v-for="item in ['todo', 'in progress', 'done']" :value="item.toLowerCase()">
+            <SelectItem v-for="item in ['todo', 'in-progress', 'done']" :value="item.toLowerCase()">
               {{ item }}
             </SelectItem>
           </SelectGroup>

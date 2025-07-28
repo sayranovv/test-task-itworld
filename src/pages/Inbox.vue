@@ -4,7 +4,7 @@ import TaskListView from '@/components/TaskListView.vue'
 
 <template>
   <div class="p-4">
-    <header class="space-y-3 my-4">
+    <header class="space-y-3 mb-4">
       <h1 class="text-3xl font-bold">Inbox</h1>
       <p class="text-sm opacity-50">All tasks across all projects</p>
     </header>

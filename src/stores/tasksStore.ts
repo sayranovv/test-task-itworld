@@ -53,7 +53,17 @@ export const useTasksStore = defineStore('tasksStore', () => {
           title: 'Hardcode subtask 3.1',
           status: 'done',
           tags: ['exmpl1', 'exmpl2'],
-          subtasks: [],
+          subtasks: [
+            {
+              id: '311',
+              title: 'Hardcode subtask 3.1.1',
+              status: 'in-progress',
+              tags: ['exmpl1', 'exmpl2'],
+              subtasks: [],
+              createdAt: new Date('2025-07-25T14:30:00Z'),
+              updatedAt: new Date('2025-07-25T14:30:00Z'),
+            },
+          ],
           createdAt: new Date('2025-07-25T14:30:00Z'),
           updatedAt: new Date('2025-07-25T14:30:00Z'),
         },
@@ -68,7 +78,7 @@ export const useTasksStore = defineStore('tasksStore', () => {
   const selectedStatus = ref<TaskStatus[]>([])
 
   const filteredTasks = computed(() => {
-    return tasks.value.filter((task: Task) => {
+    const matchesTask = (task: Task): boolean => {
       const matchesSearch = task.title.toLowerCase().includes(searchQuery.value.toLowerCase())
 
       const matchesTags =
@@ -79,8 +89,64 @@ export const useTasksStore = defineStore('tasksStore', () => {
         selectedStatus.value.some((status) => task.status.includes(status))
 
       return matchesSearch && matchesTags && matchesStatus
-    })
+    }
+
+    const filterRecursively = (task: Task): Task | null => {
+      const filteredSubtasks = task.subtasks
+        .map(filterRecursively)
+        .filter((subtask): subtask is Task => subtask !== null)
+      if (matchesTask(task) || filteredSubtasks.length > 0) {
+        return {
+          ...task,
+          subtasks: filteredSubtasks,
+        }
+      }
+      return null
+    }
+    return tasks.value.map(filterRecursively).filter((task): task is Task => task !== null)
   })
+
+  const filterTasksByStatus = (status: TaskStatus, flatten = false): Task[] => {
+    const matchesStatus = (task: Task): boolean => task.status === status
+
+    const filterRecursively = (task: Task): Task[] => {
+      const matched: Task[] = []
+
+      if (matchesStatus(task)) {
+        matched.push({ ...task, subtasks: [] })
+      }
+
+      for (const subtask of task.subtasks) {
+        matched.push(...filterRecursively(subtask))
+      }
+
+      return matched
+    }
+
+    if (flatten) {
+      return tasks.value.flatMap(filterRecursively)
+    } else {
+      const filterTree = (task: Task): Task | null => {
+        const filteredSubtasks = task.subtasks
+          .map(filterTree)
+          .filter((sub): sub is Task => sub !== null)
+
+        if (matchesStatus(task) || filteredSubtasks.length > 0) {
+          return {
+            ...task,
+            subtasks: filteredSubtasks,
+          }
+        }
+        return null
+      }
+
+      return tasks.value.map(filterTree).filter((t): t is Task => t !== null)
+    }
+  }
+
+  const addTask = (task: Task): void => {
+    tasks.value.push(task)
+  }
 
   return {
     tasks,
@@ -88,5 +154,7 @@ export const useTasksStore = defineStore('tasksStore', () => {
     selectedTags,
     selectedStatus,
     filteredTasks,
+    filterTasksByStatus,
+    addTask,
   }
 })
